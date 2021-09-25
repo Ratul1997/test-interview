@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, ActivityIndicator} from 'react-native';
 import Header from '../../../common/Header';
 import userServices from '../../../services/userServicess';
 import ArticleItem from '../common/ArticleItem';
 import firestore from '@react-native-firebase/firestore';
 export default function BookMarks() {
   const [dataList, setDataList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const renderItem = ({item}) => {
     return <ArticleItem item={item} type="BookMark" />;
   };
@@ -26,6 +27,9 @@ export default function BookMarks() {
           queryData.push(documentSnapshot.data());
         });
         setDataList(queryData);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
   return (
@@ -37,11 +41,15 @@ export default function BookMarks() {
           backgroundColor: 'transparent',
           marginHorizontal: 20,
         }}>
-        <FlatList
-          data={dataList}
-          renderItem={renderItem}
-          // keyExtractor={(item) => item.id}
-        />
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <FlatList
+            data={dataList}
+            renderItem={renderItem}
+            // keyExtractor={(item) => item.id}
+          />
+        )}
       </View>
     </>
   );
