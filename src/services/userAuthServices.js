@@ -14,6 +14,7 @@ async function googleSignUp() {
   try {
     const {idToken} = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    
     const {additionalUserInfo, user} = await auth().signInWithCredential(
       googleCredential,
     );

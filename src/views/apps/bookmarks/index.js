@@ -4,7 +4,9 @@ import Header from '../../../common/Header';
 import userServices from '../../../services/userServicess';
 import ArticleItem from '../common/ArticleItem';
 import firestore from '@react-native-firebase/firestore';
+import {useSelector} from 'react-redux';
 export default function BookMarks() {
+  const state = useSelector(state => state.userReducer);
   const [dataList, setDataList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const renderItem = ({item}) => {
@@ -17,7 +19,7 @@ export default function BookMarks() {
   const loadData = async () => {
     firestore()
       .collection('Users')
-      .doc('1')
+      .doc(state.uid)
       .collection('BookMarks')
       .get()
       .then(querySnapshot => {

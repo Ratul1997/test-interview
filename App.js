@@ -28,14 +28,24 @@ import {
 import Articles from './src/views/apps/articles';
 import Login from './src/views/pages/login';
 
+import {persistStore, persistReducer} from 'redux-persist';
+import {PersistGate} from 'redux-persist/lib/integration/react';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
+
+import {Provider} from 'react-redux';
 import AppNavigation from './src/AppNavigation';
+import {store} from './src/store/store';
+
 const App = () => {
   return (
     <>
-      <NavigationContainer>
-        <AppNavigation />
-      </NavigationContainer>
+      <Provider store={store}>
+        <PersistGate persistor={persistStore(store)}>
+          <NavigationContainer>
+            <AppNavigation />
+          </NavigationContainer>
+        </PersistGate>
+      </Provider>
     </>
   );
 };

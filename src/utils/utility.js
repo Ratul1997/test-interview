@@ -24,3 +24,8 @@ export function timeSince(date) {
   }
   return Math.floor(seconds) + ' seconds';
 }
+export const checkDataInArray = (array, id) => {
+  const index = array.findIndex(i => i === id);
+  if (index > -1) return true;
+  else return false;
+};

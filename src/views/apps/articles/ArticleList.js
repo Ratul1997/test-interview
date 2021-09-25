@@ -10,7 +10,7 @@ import {
 import ArticleItem from '../common/ArticleItem';
 import {API_URL} from '@env';
 
-export default function ArticleList() {
+export default function ArticleList({navigation}) {
   const [dataList, setDataList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
@@ -29,7 +29,9 @@ export default function ArticleList() {
     }
   };
   const renderItem = ({item}) => {
-    return <ArticleItem item={item} type="ArticleList" />;
+    return (
+      <ArticleItem item={item} type="ArticleList" navigation={navigation} />
+    );
   };
   return (
     <View

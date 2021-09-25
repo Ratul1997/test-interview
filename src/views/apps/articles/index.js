@@ -12,7 +12,7 @@ export default function Articles({navigation}) {
   };
   return (
     <View style={{flex: 1}}>
-      <Header title="Articles" onPress={onPressMenu} type='BookMarks'/>
+      <Header title="Articles" onPress={onPressMenu} type="BookMarks" />
       <SearchBar />
       <View
         style={{
@@ -43,7 +43,7 @@ export default function Articles({navigation}) {
           </Text>
         </TouchableOpacity>
       </View>
-      <ArticleList />
+      <ArticleList navigation={navigation} />
       <FloatingButton>
         <View
           style={{

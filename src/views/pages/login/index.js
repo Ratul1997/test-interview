@@ -5,7 +5,10 @@ import {colors} from '../../../configs/colors';
 import googleIcon from '../../../../assets/google.png';
 import {userAuthActions} from '../../../services/userAuthServices';
 import LoginOptions from '../../../common/LoginOptions';
-export default function Login() {
+import {useDispatch} from 'react-redux';
+import {userLogin} from '../../../store/actions';
+export default function Login({navigation}) {
+  const dispatch = useDispatch();
   const onGoogleSignIn = async () => {
     const {isNewUser, user, error, providerId} =
       await userAuthActions.googleSignUp();
@@ -13,24 +16,11 @@ export default function Login() {
       console.log(error.toString());
       alert(error);
     } else {
-      console.log(isNewUser, user);
-      if (isNewUser) {
-        goToSignUpPage(user);
-      } else {
-      }
+      dispatch(userLogin(user.uid));
+      navigation.goBack();
     }
   };
 
-  const goToSignUpPage = user => {
-    console.log(user);
-    const profileInformation = {
-      name: user.displayName,
-      email: user.email,
-      phone_number: user.phoneNumber ? user.phone_number : '',
-      photo_url: user.photoURL,
-      uid: user.uid,
-    };
-  };
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Text

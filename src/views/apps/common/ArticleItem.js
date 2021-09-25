@@ -4,18 +4,50 @@ import {colors} from '../../../configs/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {timeSince} from '../../../utils/utility';
+import {
+  checkDataInArray,
+  getStoredData,
+  timeSince,
+} from '../../../utils/utility';
 import userServices from '../../../services/userServicess';
-export default function ArticleItem({item, type}) {
+import {useSelector, useDispatch} from 'react-redux';
+import {addBookMark, removeBookMark} from '../../../store/actions';
+
+export default function ArticleItem({item, type, navigation}) {
+  const state = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
+
   const onSaveBookMarks = async () => {
-    const {error} = await userServices.storeBookMarks('1', item);
+    const {error} = await userServices.storeBookMarks(state.uid, item);
     if (error) {
       alert(error);
-      console.log(error);
     } else {
-      alert('Ok');
+      dispatch(addBookMark(item.id));
+      alert('Saved');
     }
   };
+  const onRemoveBookMarks = async () => {
+    const {error} = await userServices.removeBookMarks(state.uid, item);
+    if (error) {
+      alert(error);
+    } else {
+      dispatch(removeBookMark(item.id));
+      alert('Removed');
+    }
+  };
+
+  const onUserAction = () => {
+    if (checkDataInArray(state.bookMarks, item.id)) {
+      onRemoveBookMarks();
+    } else {
+      onSaveBookMarks();
+    }
+  };
+
+  const onNavigateLogin = async () => {
+    navigation.navigate('Login');
+  };
+
   return (
     <View style={{height: 110, flexDirection: 'row', marginVertical: 10}}>
       <View
@@ -84,8 +116,15 @@ export default function ArticleItem({item, type}) {
                 flexDirection: 'row',
                 width: '45%',
               }}
-              onPress={onSaveBookMarks}>
-              <FontAwesome name="bookmark" size={18} />
+              onPress={state.uid ? onUserAction : onNavigateLogin}>
+              <FontAwesome
+                name={
+                  checkDataInArray(state.bookMarks, item.id)
+                    ? 'bookmark'
+                    : 'bookmark-o'
+                }
+                size={18}
+              />
             </TouchableOpacity>
           )}
         </View>
